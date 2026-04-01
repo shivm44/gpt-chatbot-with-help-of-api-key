@@ -1,0 +1,26 @@
+import os
+from openai import OpenAI
+
+# Initialize client with API key from environment variable
+#insert your api key that is  saved as env var.
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+def chat_with_gpt(prompt: str) -> str:
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",  # GPT model
+        messages=[{"role": "user", "content": prompt}]
+    )
+    return response.choices[0].message.content.strip()
+
+if __name__ == "__main__":
+    print("Type 'quit', 'exit', or 'bye' to end the chat.")
+    while True:
+        user_input = input("Enter your prompt: ")
+        if user_input.lower() in ["quit", "exit", "bye"]:
+            print("Goodbye!")
+            break
+        try:
+            response = chat_with_gpt(user_input)
+            print("Chatbot Response:", response)
+        except Exception as e:
+            print("Error:", e)
